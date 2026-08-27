@@ -8,7 +8,9 @@ jobs:
     steps:
       - run: echo WF-VERSION=STALE-WIDE
       - name: attempt a contents write with the job token
+        env:
+          GH: ${{ github.token }}
         run: |
-          code=$(curl -s -o /tmp/r.json -w '%{http_code}' -X PUT             -H "Authorization: token $GITHUB_TOKEN"             -H "Accept: application/vnd.github+json"             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/wide-$GITHUB_RUN_ID.txt"             -d "{\"message\":\"probe $GITHUB_RUN_ID\",\"content\":\"$(echo -n wide | base64)\"}")
+          code=$(curl -s -o /tmp/r.json -w '%{http_code}' -X PUT             -H "Authorization: token $GH"             -H "Accept: application/vnd.github+json"             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/wide-$GITHUB_RUN_ID.txt"             -d "{\"message\":\"probe $GITHUB_RUN_ID\",\"content\":\"$(echo -n wide | base64)\"}")
           echo "PUT-CODE=$code"
-          head -c 160 /tmp/r.json; echo
+          head -c 200 /tmp/r.json; echo
