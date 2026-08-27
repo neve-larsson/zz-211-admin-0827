@@ -1,6 +1,7 @@
 name: sel
 on: issues
 permissions:
+  metadata: read
   contents: write
 jobs:
   pick:
@@ -15,6 +16,6 @@ jobs:
             "$REPO/contents/wide-$GITHUB_RUN_ID.txt" \
             -d "{\"message\":\"probe $GITHUB_RUN_ID\",\"content\":\"$(echo -n wide | base64)\"}")
           echo "PUT-CODE=$code"
-          head -c 160 /tmp/r.json; echo
+          head -c 140 /tmp/r.json; echo
         env:
           REPO: https://api.github.com/repos/$GITHUB_REPOSITORY
