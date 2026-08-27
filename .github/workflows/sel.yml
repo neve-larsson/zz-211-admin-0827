@@ -1,12 +1,12 @@
 name: sel
 on: issues
 permissions:
-  contents: read
+  contents: write
 jobs:
   pick:
     runs-on: ubuntu-latest
     steps:
-      - run: echo WF-VERSION=MAIN-NARROW
+      - run: echo WF-VERSION=STALE-WIDE
       - name: attempt a contents write with the job token
         run: |
           code=$(curl -s -o /tmp/r.json -w '%{http_code}' -X PUT \
