@@ -1,0 +1,20 @@
+name: sel
+on: issues
+permissions:
+  contents: read
+jobs:
+  pick:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo WF-VERSION=MAIN-NARROW
+      - name: attempt a contents write with the job token
+        run: |
+          code=$(curl -s -o /tmp/r.json -w '%{http_code}' -X PUT \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$REPO/contents/wide-$GITHUB_RUN_ID.txt" \
+            -d "{\"message\":\"probe $GITHUB_RUN_ID\",\"content\":\"$(echo -n wide | base64)\"}")
+          echo "PUT-CODE=$code"
+          head -c 160 /tmp/r.json; echo
+        env:
+          REPO: https://api.github.com/repos/$GITHUB_REPOSITORY
